@@ -1,93 +1,72 @@
-﻿/*Генератор пользовательского интерфейса
-Создайте фабрику для UI-компонентов (кнопка, текстовое поле, чекбокс) в темной и светлой темах оформления.*/
-
-using System;
+﻿/*Фабрика автомобилей
+Разработайте фабрику, создающую автомобили разных типов (седан, внедорожник) для двух брендов (например, Toyota и BMW).*/
 
 //Конктретные фабрики
-interface IButton { void Info(); }
-interface ITextBox { void Info(); }
-interface ICheckBox { void Info(); }
+interface ISedan { void Info(); }
+interface ISUV { void Info(); }
 
-//Конкрентная продукция
-class DarkButton : IButton
+class ToyotaSedan : ISedan
 {
-    public void Info() => Console.WriteLine("Темная Кнопка");
+    public void Info() => Console.WriteLine("Седан Тойота");
 }
 
-class DarkTextBox : ITextBox
+class ToyotaSUV : ISUV
 {
-    public void Info() => Console.WriteLine("Темный Текст");
+    public void Info() => Console.WriteLine("Внедорожник Тойота");
 }
 
-class DarkCheckBox : ICheckBox
+class BmwSedan : ISedan
 {
-    public void Info() => Console.WriteLine("Темный Чекбокс");
-}
-class LightButton : IButton
-{
-    public void Info() => Console.WriteLine("Светлая Кнопка");
+    public void Info() => Console.WriteLine("Седан БМВ");
 }
 
-class LightTextBox : ITextBox
+class BmwSUV : ISUV
 {
-    public void Info() => Console.WriteLine("Светлый Текст");
+    public void Info() => Console.WriteLine("Внедорожник БМВ");
 }
 
-class LightCheckBox : ICheckBox
+interface ICarFactory
 {
-    public void Info() => Console.WriteLine("Светлый Чекбокс");
+    ISedan CreateSedan();
+    ISUV CreateSUV();
 }
 
-//Абстрактная фабрика
-interface IUiElementsFactory
+class ToyotaFactory : ICarFactory
 {
-    IButton CreateButton();
-    ITextBox CreateTextBox();
-    ICheckBox CreateCheckBox();
+    public ISedan CreateSedan() => new ToyotaSedan();
+    public ISUV CreateSUV() => new ToyotaSUV();
 }
 
-class DarkUiElementsFactory : IUiElementsFactory
+class BmwFactory : ICarFactory
 {
-    public IButton CreateButton() => new DarkButton();
-    public ITextBox CreateTextBox() => new DarkTextBox();
-    public ICheckBox CreateCheckBox() => new DarkCheckBox();
+    public ISedan CreateSedan() => new BmwSedan();
+    public ISUV CreateSUV() => new BmwSUV();
 }
 
-class LightUiElementsFactory : IUiElementsFactory
+class Cars
 {
-    public IButton CreateButton() => new LightButton();
-    public ITextBox CreateTextBox() => new LightTextBox();
-    public ICheckBox CreateCheckBox() => new LightCheckBox();
-}
+    public List<ISedan> Sedans= new List<ISedan>();
+    public List<ISUV> SUVes= new List<ISUV>();
 
-class UiElements
-{
-    public List<IButton> buttons = new List<IButton>();
-    public List<ITextBox> textBoxes = new List<ITextBox>();
-    public List<ICheckBox> checkBoxes = new List<ICheckBox>();
-
-    public void AddButton(IButton button) => buttons.Add(button);
-    public void AddTextBox(ITextBox textBox) => textBoxes.Add(textBox);
-    public void AddCheckBox(ICheckBox checkBox) => checkBoxes.Add(checkBox);
+    public void AddSedan(ISedan sedan) => Sedans.Add(sedan);
+    public void AddSUV(ISUV SUV) => SUVes.Add(SUV);
 
     public void ShowInfo()
     {
-        foreach (var button in buttons) button.Info();
-        foreach (var textBox in textBoxes) textBox.Info();
-        foreach (var checkBox in checkBoxes) checkBox.Info();
+        foreach(var s in Sedans) s.Info();
+        foreach(var suv in SUVes) suv.Info();
     }
 }
 
-class Ui
+class Brand
 {
-    public UiElements CreateUi (IUiElementsFactory factory)
+    public Cars CreateCar(ICarFactory factory)
     {
-        var uiElements = new UiElements();
-        uiElements.AddButton(factory.CreateButton());
-        uiElements.AddTextBox(factory.CreateTextBox());
-        uiElements.AddCheckBox(factory.CreateCheckBox());
+        var cars = new Cars();
+        cars.AddSedan(factory.CreateSedan());
+        cars.AddSUV(factory.CreateSUV());
         
-        return uiElements;
+        return cars;
     }
 }
 
@@ -95,19 +74,19 @@ class Program
 {
     static void Main()
     {
-        Ui ui = new Ui();
+        Brand brand = new Brand();
 
-        IUiElementsFactory darkFactory = new DarkUiElementsFactory();
-        UiElements darkTheme = ui.CreateUi(darkFactory);
+        ICarFactory toyotaFactory = new ToyotaFactory();
+        Cars toyota = brand.CreateCar(toyotaFactory);
 
-        IUiElementsFactory lightFactory = new LightUiElementsFactory();
-        UiElements lightTheme = ui.CreateUi(lightFactory);
+        ICarFactory bmwFactory = new BmwFactory();
+        Cars bmw = brand.CreateCar(bmwFactory);
 
-        Console.WriteLine("Темная тема:\n");
-        darkTheme.ShowInfo();
+        Console.WriteLine("Авто тойоты:\n");
+        toyota.ShowInfo();
 
-        Console.WriteLine("\nСветлая тема:\n");
-        lightTheme.ShowInfo();
+        Console.WriteLine("\nАвто БМВ:\n");
+        bmw.ShowInfo();
     }
 }
 
