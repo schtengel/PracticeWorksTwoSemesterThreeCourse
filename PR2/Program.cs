@@ -1,67 +1,74 @@
-﻿class Burger
+﻿using System;
+
+class Car
 {
-    public string Bun { get; set; }
-    public string Patty { get; set; }
-    public string Cheese { get; set; }
-    public string Sauce { get; set; }
-    public string Lettuce { get; set; }
-    public string Tomato { get; set; }
+    public string Model { get; set; }
+    public string Engine { get; set; }
+    public string Transmission { get; set; }
+    public string Color { get; set; }
+    public string AirConditioning { get; set; }
+    public string Multimedia { get; set; }
 
     public void Show()
     {
-        Console.WriteLine($"Бургер>: {Bun}, {Patty}, {Cheese}, {Sauce}, {Lettuce}, {Tomato}");
+        Console.WriteLine($"Автомобиль: {Model}, {Engine}, {Transmission}, {Color}, {AirConditioning}, {Multimedia}");
     }
 }
 
-interface IBurgerBuilder
+interface ICarBuilder
 {
-    void BuildBun();
-    void BuildPatty();
-    void BuildCheese();
-    void BuildSauce();
-    void BuildLettuce();
-    void BuildTomato();
+    void BuildModel();
+    void BuildEngine();
+    void BuildTransmission();
+    void BuildColor();
+    void BuildAirConditioning();
+    void BuildMultimedia();
 
-    Burger GetBurger();
+    Car GetCar();
 }
 
-class BurgerBuilder : IBurgerBuilder
+class CarBuilder : ICarBuilder
 {
-    private Burger _burger = new Burger();
+    private Car _car = new Car();
+    public string Model { get; set; } = "Седан";
+    public string Engine { get; set; } = "2л, бензин";
+    public string Transmission { get; set; } = "Автомат";
+    public string Color { get; set; } = "Белый";
+    public string AirConditioning { get; set; } = "Есть";
+    public string Multimedia { get; set; } = "Нет";
 
-    public void BuildBun() { _burger.Bun = "Булочка с кунжутом"; }
-    public void BuildPatty() { _burger.Patty = "Говяжье мясо"; }
-    public void BuildCheese() { _burger.Cheese = "Чеддер"; }
-    public void BuildSauce() { _burger.Sauce = "Кетчуп"; }
-    public void BuildLettuce() { _burger.Lettuce = "Салат айсберг"; }
-    public void BuildTomato() { _burger.Tomato = "Свежие томаты"; }
-    public Burger GetBurger() { return _burger; }
+    public void BuildModel() { _car.Model = Model; }
+    public void BuildEngine() { _car.Engine = Engine; }
+    public void BuildTransmission() { _car.Transmission = Transmission; }
+    public void BuildColor() { _car.Color = Color; }
+    public void BuildAirConditioning() { _car.AirConditioning = AirConditioning; }
+    public void BuildMultimedia() { _car.Multimedia = Multimedia; }
+
+    public Car GetCar() { return _car; }
 }
 
-class BurgerDirector
+class CarDirector
 {
-    public void MakeBurger(IBurgerBuilder builder)
+    public void MakeCar(ICarBuilder builder)
     {
-        builder.BuildBun();
-        builder.BuildPatty();
-        builder.BuildCheese();
-        builder.BuildSauce();
-        builder.BuildLettuce();
-        builder.BuildTomato();
+        builder.BuildModel();
+        builder.BuildEngine();
+        builder.BuildTransmission();
+        builder.BuildColor();
+        builder.BuildAirConditioning();
+        builder.BuildMultimedia();
     }
 }
 
-class Runner
+class Program
 {
     static void Main()
     {
-        BurgerDirector director = new BurgerDirector();
+        CarDirector director = new CarDirector();
 
-        BurgerBuilder builder = new BurgerBuilder();
-        director.MakeBurger(builder);
-        Burger burger = builder.GetBurger();
-
-        burger.Show();
-
+        CarBuilder defaultBuilder = new CarBuilder();
+        director.MakeCar(defaultBuilder);
+        Car defaultCar = defaultBuilder.GetCar();
+        defaultCar.Show();
     }
 }
