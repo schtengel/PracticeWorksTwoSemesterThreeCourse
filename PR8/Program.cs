@@ -30,7 +30,7 @@ public class SaveDOCX : IDocument
     }
 }
 
-public class Document
+public abstract class Document
 {
     protected IDocument document;
 

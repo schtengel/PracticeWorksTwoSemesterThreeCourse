@@ -3,7 +3,8 @@
 
 public class ConfigManager
 {
-    private static readonly Lazy<ConfigManager> lazyInstance = new Lazy<ConfigManager>(() => new ConfigManager());
+    private static readonly Lazy<ConfigManager> lazyInstance = new Lazy<ConfigManager>(() 
+        => new ConfigManager());
     private ConfigManager() => Console.WriteLine("Создан экземпляр конфигурационного менеджера");
     public static ConfigManager Instance => lazyInstance.Value;
 }
