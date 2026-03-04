@@ -14,6 +14,8 @@ public class TextEditor
     private string _text = "";
     private Stack<string> _history = new Stack<string>();
 
+    public Stack<string> History { get { return _history; } }
+
     public string Text
     {
         get { return _text; }
@@ -110,26 +112,54 @@ class Program
         string initialText = Console.ReadLine();
         editor.Text = initialText;
 
-        Console.WriteLine("\nВведите новый текст для записи: ");
-        string newText = Console.ReadLine();
-        ICommand write = new WriteTextCommand(editor, newText);
-        invoker.SetCommand(write);
-        invoker.ExecuteCommand();
-        editor.ShowText();
+        
 
-        ICommand delete = new DeleteTextCommand(editor);
-        invoker.SetCommand(delete);
-        invoker.ExecuteCommand();
-        editor.ShowText();
+        while (true)
+        {
+            Console.WriteLine("Выберите команду: ");
+            Console.WriteLine("1. Изменение текста");
+            Console.WriteLine("2. Удаление текста");
+            Console.WriteLine("3. Отмена действия");
+            Console.WriteLine("4. Выход");
 
-        ICommand undo = new UndoCommand(editor);
-        invoker.SetCommand(undo);
-        invoker.ExecuteCommand();
-        editor.ShowText();
+            int i = Console.Read();
 
-        invoker.ExecuteCommand();
-        editor.ShowText();
+            switch(i)
+            {
+                case 1:
+                    Console.WriteLine("\nВведите новый текст для записи: ");
+                    string newText = Console.ReadLine();
 
-        invoker.ExecuteCommand();
+                    ICommand write = new WriteTextCommand(editor, newText);
+
+                    invoker.SetCommand(write);
+                    invoker.ExecuteCommand();
+                    editor.ShowText();
+                    break;
+                case 2:
+                    ICommand delete = new DeleteTextCommand(editor);
+                    invoker.SetCommand(delete);
+                    invoker.ExecuteCommand();
+                    editor.ShowText();
+                    break;
+                case 3:
+                    ICommand undo = new UndoCommand(editor);
+                    invoker.SetCommand(undo);
+                    invoker.ExecuteCommand();
+                    editor.ShowText();
+                    break;
+                case 4:
+                    Console.WriteLine("История изменений: ");
+                    Console.WriteLine(editor.History.ToArray()); 
+                    break;
+                case 5:
+                    Console.WriteLine("Выход с программы...");
+                    Environment.Exit(0);
+                    break;
+                case 0:
+                    Console.WriteLine("Введен неверный символ");
+                    break;
+            }
+        }
     }
 }
