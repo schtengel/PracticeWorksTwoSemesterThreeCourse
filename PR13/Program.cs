@@ -37,7 +37,7 @@ public class CreditCardHandler : BaseHandler
 
 public class PayPalHandler : BaseHandler
 {
-    public override void Handle(string request)
+    public override void Handle(string request) 
     {
         if (request == "PayPal") Console.WriteLine("PayPal обработал запрос.");
         else base.Handle(request);
