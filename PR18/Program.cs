@@ -62,7 +62,7 @@ class Program
         Console.WriteLine("3 - Биткоин");
 
         string choice = Console.ReadLine();
-        double amount = 500.0; // сумма к оплате
+        double amount = 500.0;
 
         switch (choice)
         {
